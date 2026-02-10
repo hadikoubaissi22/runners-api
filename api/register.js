@@ -1,6 +1,7 @@
 // runners-api/api/register.js
 import { z } from 'zod';
 import { pool } from '../db.js';
+import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
   // CORS headers
@@ -43,6 +44,37 @@ export default async function handler(req, res) {
         data.comments || null
       ]
     );
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER, // Your Gmail address from .env
+        pass: process.env.EMAIL_PASS, // Your App Password from .env
+      },
+    });
+
+    // 4. Create Email Content
+    const mailOptions = {
+      from: `"Runner App" <${process.env.EMAIL_USER}>`,
+      to: 'hadikoubaissi2@gmail.com', // The specific receiver
+      subject: `New Runner Registration: ${data.full_name}`,
+      html: `
+        <h2>New Runner Request</h2>
+        <p><strong>Name:</strong> ${data.full_name}</p>
+        <p><strong>Phone:</strong> ${data.phone}</p>
+        <p><strong>Level:</strong> ${data.experience_level}</p>
+        <p><strong>Distance:</strong> ${data.preferred_distance}</p>
+        <p><strong>Pace:</strong> ${data.pace}</p>
+        <p><strong>Availability:</strong></p>
+        <ul>
+          ${data.days.map(d => `<li>${d.day} at ${d.time}</li>`).join('')}
+        </ul>
+        <p><strong>Comments:</strong> ${data.comments || 'N/A'}</p>
+      `,
+    };
+
+    // 5. Send Email
+    await transporter.sendMail(mailOptions);
 
     res.status(200).json({ success: true });
   } catch (err) {
