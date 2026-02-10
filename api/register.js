@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       phone: z.string().min(6),
       address: z.string().min(3),
       experience_level: z.enum(['Beginner', 'Intermediate', 'Advanced']),
-      preferred_distance: z.enum(['5K', '10K', 'Half']),
+      preferred_distance: z.enum(['5K', '7K', '10K']),
       pace: z.string(),
       days: z.array(z.object({ day: z.string(), time: z.string() })).min(1),
       comments: z.string().optional()
