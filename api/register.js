@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     await pool.query(
       `INSERT INTO runner_requests
       (full_name, gender,phone, address, experience_level, preferred_distance, pace, days, comments)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
       [
         data.full_name,
         data.gender,
