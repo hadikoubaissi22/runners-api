@@ -18,6 +18,7 @@ export default async function handler(req, res) {
   try {
     const runnerSchema = z.object({
       full_name: z.string().min(3),
+      gender: z.string().min(6),
       phone: z.string().min(6),
       address: z.string().min(3),
       experience_level: z.enum(['Beginner', 'Intermediate', 'Advanced']),
@@ -31,10 +32,11 @@ export default async function handler(req, res) {
 
     await pool.query(
       `INSERT INTO runner_requests
-      (full_name, phone, address, experience_level, preferred_distance, pace, days, comments)
+      (full_name, gender,phone, address, experience_level, preferred_distance, pace, days, comments)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
       [
         data.full_name,
+        data.gender,
         data.phone,
         data.address,
         data.experience_level,
@@ -61,6 +63,7 @@ export default async function handler(req, res) {
       html: `
         <h2>New Runner Request</h2>
         <p><strong>Name:</strong> ${data.full_name}</p>
+        <p><strong>Gender:</strong> ${data.gender}</p>
         <p><strong>Phone:</strong> ${data.phone}</p>
         <p><strong>Level:</strong> ${data.experience_level}</p>
         <p><strong>Distance:</strong> ${data.preferred_distance}</p>
