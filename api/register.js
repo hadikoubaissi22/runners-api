@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     const runnerSchema = z.object({
       full_name: z.string().min(3),
-      gender: z.string().min(6),
+      gender: z.string().min(4),
       phone: z.string().min(6),
       address: z.string().min(3),
       experience_level: z.enum(['Beginner', 'Intermediate', 'Advanced']),
